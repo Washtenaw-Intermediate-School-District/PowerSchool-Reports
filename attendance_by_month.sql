@@ -60,7 +60,7 @@ with secmeets as (
       count(secmeets.studentid) pcount
     from secmeets
       join caldays on secmeets.period_number=caldays.period_number and secmeets.cycle_day_letter=caldays.abbreviation and secmeets.schoolid=caldays.schoolid and caldays.date_value between secmeets.dateenrolled and secmeets.dateleft
-      join schools sch on secmeets.schoolid = sch.school_number
+      join schools sch on secmeets.schoolid = sch.school_number AND sch.school_number like case when ~(curschoolid)=0 then '%' else '~(curschoolid)' end
     group by
       sch.name,
       to_char(caldays.date_value, 'MONTH,YYYY')
