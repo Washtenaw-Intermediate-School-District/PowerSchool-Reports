@@ -1,0 +1,105 @@
+with programs as 
+(
+select 
+s.student_number,
+case gcx.flaglep
+when 1 then 'English Language Learner (ELL)'
+else null
+end LEP,
+case gcx.flagspeced
+when 1 then 'Special Education'
+else null
+end SpecEd,
+case gcx.flagtitle1
+when 1 then 'Title 1'
+else null
+end title_1,
+case gcx.flagunacyouth
+when 1 then 'Unaccompanied Youth'
+else null
+end unaccyouth,
+case gcx.flagearlyon
+when 1 then 'Early On Intervention Student'
+else null
+end earlyon,
+case gcx.flagadvanced
+when 1 then 'Advanced and Accelerated'
+else null
+end advanced,
+case gcx.flagalternateed
+when 1 then 'Alternative Education Student'
+else null
+end alternative_ed,
+case gcx.flagatrisk
+when 1 then 'At Risk Student'
+else null
+end atrisk,
+case gcx.flagdevretkinder
+when 1 then 'Developmental Retention K'
+else null
+end devretkinder,
+case gcx.flagearlycollege
+when 1 then 'Early Middle College'
+else null
+end earlycollege,
+case gcx.flag21cclc
+when 1 then '21st Century Community Learning Cen'
+else null
+end CCLC,
+case gcx.flagexchangestu
+when 1 then 'Exchange Student'
+else null
+end exchangestudent,
+case gcx.flaginternational
+when 1 then 'International Student'
+else null
+end internationalstudent,
+case gcx.flagmigrant
+when 1 then 'Migrant Student'
+else null
+end migrantstudent,
+case gcx.flagoutofstate
+when 1 then 'Out of State Resident Student'
+else null
+end outofstate,
+case gcx.flagseattimewaiver
+when 1 then 'Seat-Time Waiver Participant'
+else null
+end seattimewaiver,
+case gcx.flagsection504
+when 1 then 'Section 504'
+else null
+end section504
+from students s
+join s_mi_stu_gc_x gcx on s.dcid=gcx.studentsdcid
+~[if#cursel.%param1%=Yes]
+               INNER JOIN ~[temp.table.current.selection:students] stusel ON stusel.dcid=s.dcid
+[/if#cursel]
+where s.enroll_status=0
+),
+unpiv as 
+(
+select
+*
+from programs
+unpivot (program_name FOR prgm IN (LEP AS 'LEP',
+speced AS 'SE',
+Title_1 AS 'T1',
+unaccyouth AS 'UY',
+earlyon AS 'EO',
+advanced as 'AV',
+alternative_ed as 'AED',
+atrisk as 'AR',
+devretkinder as 'DEVK',
+earlycollege as 'ECOL',
+CCLC as 'CC',
+exchangestudent as 'EXCHG',
+internationalstudent as 'INT',
+migrantstudent as 'MIG',
+outofstate as 'OOS',
+seattimewaiver as 'STW',
+section504 as 'SEC'
+))
+)
+select unpiv.student_number, unpiv.program_name
+from unpiv
