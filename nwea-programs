@@ -7,7 +7,7 @@ when 1 then 'English Language Learner (ELL)'
 else null
 end LEP,
 case gcx.flagspeced
-when 1 then 'Special Education'
+when 1 then 'Special Education (SPED)'
 else null
 end SpecEd,
 case gcx.flagtitle1
