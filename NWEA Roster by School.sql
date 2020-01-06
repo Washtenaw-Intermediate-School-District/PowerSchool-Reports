@@ -1,12 +1,13 @@
 SELECT
+ students.dcid,
  schools.school_number,
  schools.name,
- NULL,
- schoolstaff.id,
+ users.dcid,
+ users.teachernumber,
  S_MI_SSF_TSDL_X.repPIC,
  users.last_name,
  users.first_name,
- users.middle_name,
+ SUBSTR(users.middle_name,0,1),
  users.email_addr,
  users.email_addr,
  courses.course_name,
@@ -15,8 +16,8 @@ SELECT
  students.state_studentnumber,
  students.last_name,
  students.first_name,
- SUBSTR(users.middle_name,0,1),
- students.dob,
+ SUBSTR(students.middle_name,0,1),
+ to_char(students.dob,'MM/DD/YYYY'),
  students.gender,
  CASE to_char(students.grade_level)
     WHEN '0' THEN 'K'
@@ -25,24 +26,13 @@ SELECT
   ELSE to_char(students.grade_level)
  END,
  CASE students.ethnicity
-   when 'A' then 'Asian'
-   when 'B' then 'Black or African American'
-   when 'H' then 'Hispanic or Latino'
-   when 'M' then 'Multi-ethnic'
-   when 'I' then 'American Indian or Alaskan Native'
-   when 'P' then 'Native Hawaiian or Other Pacific Islander'
-   when 'C' then 'White'
-   else 'Not Specified or Other'
- END,
- CASE s_mi_stu_gc_x.flaglep
-  WHEN 1 THEN 'Yes'
-  ELSE 'No'
- END,
- CASE s_mi_stu_gc_x.flagspeced
-  WHEN 1 THEN 'Yes'
-  ELSE 'No'
+  WHEN to_char('H') THEN 'Hispanic or Latino'
+  WHEN to_char('C') THEN 'White'
+  WHEN to_char('B') THEN 'Black or African American'
+  WHEN to_char('M') THEN 'Multi-ethnic'
+  ELSE 'Not Specified or Other'
  END
-
+ 
 FROM
     students
     JOIN s_mi_stu_gc_x ON s_mi_stu_gc_x.studentsdcid = students.dcid
@@ -52,14 +42,16 @@ FROM
     JOIN schools ON schools.school_number = students.schoolid
     JOIN schoolstaff ON sections.teacher = schoolstaff.id
     JOIN users ON schoolstaff.users_dcid = users.dcid
-    LEFT OUTER JOIN S_MI_SSF_TSDL_X ON schoolstaff.dcid = S_MI_SSF_TSDL_X.schoolstaffdcid
-
-
+    LEFT OUTER JOIN S_MI_SSF_TSDL_X ON schoolstaff.dcid = S_MI_SSF_TSDL_X.schoolstaffdcid 
+ 
+ 
 WHERE
  students.entrydate >= to_date('%param1%','MM/DD/YYYY')
  AND students.schoolid = ~(curschoolid)
  AND cc.termid >= (to_char(students.entrydate,'YYYY') - 1990) * 100
+ AND courses.course_name LIKE ('AM%')
+ AND students.enroll_status = 0
 
-
+ 
 ORDER BY
- users.lastfirst, courses.course_name, students.lastfirst
+ users.lastfirst,students.lastfirst
