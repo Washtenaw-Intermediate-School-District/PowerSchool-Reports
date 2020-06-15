@@ -4,14 +4,14 @@ select
   STUDENTS.LASTFIRST,
   STUDENTS.GRADE_LEVEL,
   (CASE ps_customfields.getcf('students',students.id,'have_compUseForm') WHEN '1' THEN 'YES' WHEN '0' THEN 'NO' ELSE 'Permission Not Signed' END),
-  (CASE U_FLAG.FLAG_DISTANCELEARNINGAUP WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE U_FLAG.FLAG_TELETHERAPYAUP WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE U_FLAG.publish_permission WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE U_FLAG.military_release WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE U_FLAG.health_dept_release WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE u_flag.flag_er_medicalconsent WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE u_flag.flag_sharemedicalinfo WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END),
-  (CASE u_flag.flag_nocontacterpermission WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'PermissionNotSigned' END)
+  (CASE U_FLAG.FLAG_DISTANCELEARNINGAUP WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE U_FLAG.FLAG_TELETHERAPYAUP WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE U_FLAG.publish_permission WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE U_FLAG.military_release WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE U_FLAG.health_dept_release WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE u_flag.flag_er_medicalconsent WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE u_flag.flag_sharemedicalinfo WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END),
+  (CASE u_flag.flag_nocontacterpermission WHEN 1 THEN 'YES' WHEN 0 THEN 'NO' ELSE 'Permission Not Signed' END)
 
 From
   (STUDENTs left join U_FLAG on STUDENTS.DCID =U_FLAG.STUDENTSDCID)
