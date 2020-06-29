@@ -2,16 +2,7 @@ SELECT
     s.dcid,
     s.student_number,
     chr(60) || 'a href=/admin/students/customlogentry.html?frn=008' || to_char(lg.dcid) || '&studentfrn=001' || to_char(s.dcid)  || ' target=_blank' ||  '>' || s.LastFirst || chr(60) || '/a>',
-    (
-      SELECT
-        CASE
-            WHEN lg.entry_date BETWEEN stu.entrydate AND stu.exitdate THEN stu.grade_level
-            WHEN lg.entry_date BETWEEN reenrollments.entrydate AND reenrollments.exitdate THEN reenrollments.grade_level
-          ELSE 9999999
-        END
-      FROM students stu JOIN reenrollments ON stu.id = reenrollments.studentid
-      WHERE stu.student_number = s.student_number AND lg.entry_date BETWEEN reenrollments.entrydate AND reenrollments.exitdate
-    ),
+    s.grade_level,
     to_char(lg.entry_date,'MM/DD/YYYY'),
     CASE
       WHEN s.ethnicity = 'B' THEN 'African-American'
@@ -51,10 +42,11 @@ FROM Log lg
     INNER JOIN Students s ON lg.StudentID = s.ID
     LEFT OUTER JOIN Gen g ON lg.subtype = g.value AND g.cat = 'subtype' and g.name=-100000
     INNER JOIN S_MI_STU_GC_X state ON s.dcid = state.studentsdcid
-    INNER JOIN schools ON lg.schoolid = schools.school_number
+    INNER JOIN schools ON s.schoolid = schools.school_number
 
 WHERE
-    lg.logtypeid = -100000
+    s.enroll_status=0
+    AND lg.logtypeid = -100000
     AND to_date(to_char(lg.entry_date,'MM/DD/YYYY'),'MM/DD/YYYY') between to_date('%param1%','MM/DD/YYYY') and to_date('%param2%','MM/DD/YYYY')
     AND s.schoolid LIKE CASE WHEN ~(curschoolid)=0 then '%' ELSE '~(curschoolid)' END
 

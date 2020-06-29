@@ -7,11 +7,11 @@ SELECT
         CASE
             WHEN lg.entry_date BETWEEN stu.entrydate AND stu.exitdate THEN stu.grade_level
             WHEN lg.entry_date BETWEEN reenrollments.entrydate AND reenrollments.exitdate THEN reenrollments.grade_level
-            ELSE 5
+          ELSE 999999
         END
       FROM students stu JOIN reenrollments ON stu.id = reenrollments.studentid
       WHERE stu.student_number = s.student_number AND lg.entry_date BETWEEN reenrollments.entrydate AND reenrollments.exitdate
-    ) AS "Grade Level",
+    ),
     to_char(lg.entry_date,'MM/DD/YYYY'),
     CASE
       WHEN s.ethnicity = 'B' THEN 'African-American'
