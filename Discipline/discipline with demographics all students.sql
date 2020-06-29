@@ -55,9 +55,8 @@ FROM Log lg
 
 WHERE
     lg.logtypeid = -100000
-    AND to_date(to_char(lg.entry_date,'MM/DD/YYYY'),'MM/DD/YYYY') BETWEEN to_date('9/1/2015','MM/DD/YYYY') and to_date('6/30/2019','MM/DD/YYYY')
-    AND (s.schoolid = 3000 OR s.schoolid = 999999)
-    AND s.student_number = 101810
+    AND to_date(to_char(lg.entry_date,'MM/DD/YYYY'),'MM/DD/YYYY') BETWEEN to_date('%param1%','MM/DD/YYYY') and to_date('%param2%','MM/DD/YYYY')
+    AND (lg.schoolid LIKE CASE WHEN ~(curschoolid)=0 then '%' ELSE '~(curschoolid)' END OR s.schoolid = 999999)
 
 ORDER BY
   schools.name, s.lastfirst
