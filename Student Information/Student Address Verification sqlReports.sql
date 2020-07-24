@@ -29,6 +29,7 @@ FROM students
 
 WHERE
 	studentcontactdetail.liveswithflg = 1
+    AND students.schoolid like case when ~(curschoolid)=0 then '%' else '~(curschoolid)' end
 
 ORDER BY
 	studentcontactassoc.contactpriorityorder
