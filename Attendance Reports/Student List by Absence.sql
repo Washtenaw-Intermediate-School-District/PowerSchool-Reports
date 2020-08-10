@@ -1,3 +1,7 @@
+/* 
+    From Stephanie
+*/
+
 SELECT
 
         stu.DCID,
