@@ -11,8 +11,6 @@ SELECT
     ROUND( SUM (CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) / OA."totalPossiblePeriods" * 100,2) AS "pct periods",
     MEM."memValue",
     MEM."memValue" / calDays."days" * 100 AS "pct attn"
-    
- 
 
 FROM STUDENTS
     JOIN S_MI_STU_GC_X state ON STUDENTS.dcid = state.studentsdcid
@@ -40,8 +38,8 @@ FROM STUDENTS
 		AND SECTION_MEETING.YEAR_ID = CYCLE_DAY.YEAR_ID
 		JOIN CALENDAR_DAY ON SECTIONS.SCHOOLID = CALENDAR_DAY.SCHOOLID
 		AND CYCLE_DAY.id = CALENDAR_DAY.CYCLE_DAY_ID
-		AND CALENDAR_DAY.DATE_VALUE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-		AND to_date('09/11/2020', 'mm/dd/yyyy')
+		AND CALENDAR_DAY.DATE_VALUE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+		AND to_date('09/18/2020', 'mm/dd/yyyy')
 		JOIN BELL_SCHEDULE_ITEMS ON BELL_SCHEDULE_ITEMS.BELL_SCHEDULE_ID = CALENDAR_DAY.BELL_SCHEDULE_ID
 		AND BELL_SCHEDULE_ITEMS.PERIOD_ID = PERIOD.ID
 	WHERE
@@ -52,12 +50,12 @@ FROM STUDENTS
     JOIN (
 		SELECT
             studentid,
-			sum(MEMBERSHIPVALUE) AS "memValue"
+			sum(attendancevalue) AS "memValue"
 		FROM
 			PS_ADAADM_MEETING_PTOD
 		WHERE
-			CALENDARDATE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-			AND to_date('09/11/2020', 'mm/dd/yyyy')
+			CALENDARDATE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+			AND to_date('09/18/2020', 'mm/dd/yyyy')
         GROUP BY studentid
     ) MEM ON STUDENTS.ID = MEM.studentid
     OUTER APPLY (
@@ -66,19 +64,18 @@ FROM STUDENTS
 		FROM
 			CALENDAR_DAY
 		WHERE
-			DATE_VALUE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-			AND to_date('09/11/2020', 'mm/dd/yyyy')
+			DATE_VALUE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+			AND to_date('09/18/2020', 'mm/dd/yyyy')
 			AND SCHOOLID = STUDENTS.schoolid
     ) calDays
-    
-
 
 WHERE
 	STUDENTS.ENROLL_STATUS = 0
 	AND STUDENTS.SCHOOLID IN (1925,1923,3000,9404,1153,1157,2988,1705,798,2062,1938)
-	AND ATT.ATT_DATE >= to_date('09/08/2020','MM/DD/YYYY')
-	AND STUDENTS.SCHOOLID = 1157
-	AND 
+	AND ATT.ATT_DATE >= to_date('09/14/2020','MM/DD/YYYY')
+	--AND STUDENTS.SCHOOLID = 1157
+	AND ATT.ATT_CODE IS NOT NULL
+
     --AND students.id = 13301
     
 GROUP BY
