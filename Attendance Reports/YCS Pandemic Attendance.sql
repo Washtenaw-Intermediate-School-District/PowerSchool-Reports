@@ -1,4 +1,5 @@
 SELECT
+    STUDENTS.dcid,
     STUDENTS.student_number,
     STUDENTS.LastFirst,
     STUDENTS.grade_level,
@@ -7,10 +8,9 @@ SELECT
 	SUM (CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) AS "present codes",
     SUM (CASE WHEN PRESENCE_STATUS_CD = 'Absent' THEN 1 ELSE 0 END) AS "absent codes",
     OA."totalPossiblePeriods",
-    ROUND( (CASE WHEN SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) > OA."totalPossiblePeriods" THEN OA."totalPossiblePeriods" ELSE SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) END)  / OA."totalPossiblePeriods" * 100,2) AS "pct periods",
+    ROUND( SUM (CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) / OA."totalPossiblePeriods" * 100,2) AS "pct periods",
     MEM."memValue",
-    MEM."memValue" / calDays."days" * 100 AS "pct attn",
-    ((CASE WHEN SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) >= 2 THEN 2 END) / 2) * 100 AS "min two way pct"
+    MEM."memValue" / calDays."days" * 100 AS "pct attn"
 
 FROM STUDENTS
     JOIN S_MI_STU_GC_X state ON STUDENTS.dcid = state.studentsdcid
@@ -38,14 +38,13 @@ FROM STUDENTS
 		AND SECTION_MEETING.YEAR_ID = CYCLE_DAY.YEAR_ID
 		JOIN CALENDAR_DAY ON SECTIONS.SCHOOLID = CALENDAR_DAY.SCHOOLID
 		AND CYCLE_DAY.id = CALENDAR_DAY.CYCLE_DAY_ID
-		AND CALENDAR_DAY.DATE_VALUE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-		AND to_date('09/25/2020', 'mm/dd/yyyy')
+		AND CALENDAR_DAY.DATE_VALUE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+		AND to_date('09/18/2020', 'mm/dd/yyyy')
 		JOIN BELL_SCHEDULE_ITEMS ON BELL_SCHEDULE_ITEMS.BELL_SCHEDULE_ID = CALENDAR_DAY.BELL_SCHEDULE_ID
 		AND BELL_SCHEDULE_ITEMS.PERIOD_ID = PERIOD.ID
 	WHERE
 		s1.ENROLL_STATUS = 0
         AND BELL_SCHEDULE_ITEMS.ADA_CODE = 1
-        AND CALENDAR_DAY.note NOT LIKE ('%Independent%')
 	GROUP BY s1.DCID
     ) OA ON STUDENTS.dcid = OA.dcid
     JOIN (
@@ -55,8 +54,8 @@ FROM STUDENTS
 		FROM
 			PS_ADAADM_MEETING_PTOD
 		WHERE
-			CALENDARDATE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-			AND to_date('09/25/2020', 'mm/dd/yyyy')
+			CALENDARDATE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+			AND to_date('09/18/2020', 'mm/dd/yyyy')
         GROUP BY studentid
     ) MEM ON STUDENTS.ID = MEM.studentid
     OUTER APPLY (
@@ -65,21 +64,19 @@ FROM STUDENTS
 		FROM
 			CALENDAR_DAY
 		WHERE
-			DATE_VALUE BETWEEN to_date('09/08/2020', 'mm/dd/yyyy')
-			AND to_date('09/25/2020', 'mm/dd/yyyy')
+			DATE_VALUE BETWEEN to_date('09/14/2020', 'mm/dd/yyyy')
+			AND to_date('09/18/2020', 'mm/dd/yyyy')
 			AND SCHOOLID = STUDENTS.schoolid
-			AND INSESSION = 1
     ) calDays
 
 WHERE
 	STUDENTS.ENROLL_STATUS = 0
 	AND STUDENTS.SCHOOLID IN (1925,1923,3000,9404,1153,1157,2988,1705,798,2062,1938)
-	AND ATT.ATT_DATE >= to_date('09/08/2020','MM/DD/YYYY')
+	AND ATT.ATT_DATE >= to_date('09/14/2020','MM/DD/YYYY')
 	--AND STUDENTS.SCHOOLID = 1157
 	AND ATT.ATT_CODE IS NOT NULL
 
-    --AND STUDENTS.SCHOOLID = 1153
-    --AND STUDENTS.STUDENT_NUMBER = 109959
+    --AND students.id = 13301
     
 GROUP BY
 	STUDENTS.dcid,
