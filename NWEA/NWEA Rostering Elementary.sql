@@ -2,7 +2,7 @@ SELECT
   schools.school_number,
   schools.name,
   users.teachernumber,
-  schoolstaff.id,
+  users.dcid,
   S_MI_SSF_TSDL_X.repPIC,
   users.last_name,
   users.first_name,
@@ -45,7 +45,7 @@ FROM
     JOIN courses ON courses.course_number = cc.course_number
     JOIN schools ON schools.school_number = cc.schoolid
     LEFT OUTER JOIN schoolstaff ON sections.teacher = schoolstaff.id
-    LEFT OUTER JOIN users ON schoolstaff.users_dcid = users.dcid AND schoolstaff.schoolid = cc.schoolid
+    LEFT OUTER JOIN users ON schoolstaff.users_dcid = users.dcid AND schoolstaff.schoolid = cc.schoolid AND users.last_name NOT LIKE ('TBA%')
     LEFT OUTER JOIN S_MI_SSF_TSDL_X ON schoolstaff.dcid = S_MI_SSF_TSDL_X.schoolstaffdcid
 
 
@@ -53,11 +53,10 @@ WHERE
  students.entrydate >= to_date('09/08/2020','MM/DD/YYYY')
  AND students.enroll_status = 0
  AND courses.course_name LIKE ('AM%')
- AND cc.termid BETWEEN 3000 AND 3001
- --AND students.grade_level BETWEEN 6 AND 8
- AND users.last_name NOT LIKE ('TBA%')
+ AND cc.termid >= 3000
  AND cc.schoolid != 1938
+ AND users.last_name LIKE ('Lutz')
  
 
 ORDER BY
- users.lastfirst, students.lastfirst
+	users.lastfirst, students.lastfirst
