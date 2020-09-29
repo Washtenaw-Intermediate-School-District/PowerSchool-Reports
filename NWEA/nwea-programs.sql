@@ -1,6 +1,6 @@
 WITH programs AS (
 	SELECT
-		s.student_number,
+		s.dcid,
 		CASE gcx.flaglep WHEN 1 THEN 'English Language Learner (ELL)'
 		ELSE NULL
 		END LEP,
@@ -51,7 +51,8 @@ WITH programs AS (
 		END seattimewaiver,
 		CASE gcx.flagsection504 WHEN 1 THEN 'Section 504'
 		ELSE NULL
-		END section504
+		END section504,
+		s.schoolid
 	FROM
 		students s
 		JOIN s_mi_stu_gc_x gcx ON s.dcid = gcx.studentsdcid
@@ -81,8 +82,9 @@ unpiv AS (
 				section504 AS 'SEC'))
 )
 SELECT
-	unpiv.student_number,
+	unpiv.dcid,
 	unpiv.program_name
 FROM
 	unpiv
 WHERE
+	unpiv.schoolid = 9404
