@@ -8,7 +8,7 @@ SELECT
     SUM (CASE WHEN PRESENCE_STATUS_CD = 'Absent' THEN 1 ELSE 0 END) AS "absent codes",
     OA."totalPossiblePeriods",
     ROUND( (CASE WHEN SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) > OA."totalPossiblePeriods" THEN OA."totalPossiblePeriods" ELSE SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) END)  / OA."totalPossiblePeriods" * 100,2) AS "pct periods",
-    MEM."memValue",
+    MEM."memValue" AS "attendance",
     MEM."memValue" / calDays."days" * 100 AS "pct attn",
     ((CASE WHEN SUM(CASE WHEN PRESENCE_STATUS_CD = 'Present' THEN 1 ELSE 0 END) >= 2 THEN 2 END) / 2) * 100 AS "min two way pct"
 
