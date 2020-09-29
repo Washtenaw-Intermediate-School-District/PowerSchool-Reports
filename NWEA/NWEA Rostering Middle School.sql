@@ -11,7 +11,7 @@ SELECT
   users.email_addr,
   courses.course_name,
   NULL,
-  students.student_number,
+  students.student_number, --most likely former student ID
   students.dcid,
   students.state_studentnumber,
   students.last_name,
@@ -19,13 +19,7 @@ SELECT
   SUBSTR(students.middle_name,0,1),
   to_char(students.dob,'MM/DD/YYYY'),
   students.gender,
-  CASE to_char(students.grade_level)
-    WHEN '0' THEN 'K'
-    WHEN '-1' THEN 'PK'
-    WHEN '-2' THEN 'PK'
-    WHEN '-3' THEN 'PK'
-  ELSE to_char(students.grade_level)
-  END,
+  students.grade_level,
   CASE students.ethnicity
     when 'A' then 'Asian'
     when 'B' then 'Black or African American'
@@ -35,7 +29,7 @@ SELECT
     when 'P' then 'Native Hawaiian or Other Pacific Islander'
     when 'C' then 'White'
     else 'Not Specified or Other'
-  END
+  END AS "Ethnicity"
 
 FROM
     students
@@ -52,7 +46,7 @@ FROM
 WHERE
  students.entrydate >= to_date('09/08/2020','MM/DD/YYYY')
  AND students.enroll_status = 0
- AND cc.termid BETWEEN 3000 AND 3001
+ AND cc.termid BETWEEN 3000 AND 3001 --only rostering first semester classes
  AND students.grade_level BETWEEN 6 AND 8
  AND users.last_name NOT LIKE ('TBA%')
  
