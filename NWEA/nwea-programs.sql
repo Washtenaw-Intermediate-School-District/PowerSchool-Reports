@@ -88,3 +88,4 @@ FROM
 	unpiv
 WHERE
 	unpiv.schoolid = 9404
+	AND unpiv.dcid NOT IN (20801,4859)
