@@ -25,6 +25,7 @@ WHERE
     (st.exitdate IS NULL OR st.exitdate>'%param1%')
     AND (a.att_date IS NULL OR (a.att_mode_code='ATT_ModeMeeting') )
     AND st.grade_level>-1
+    AND st.schoolid IN (1925,1923,3000,9404,1153,1157,2988,1705,798,2062,1938)
     AND st.schoolid like case when ~(curschoolid)=0 then '%' else '~(curschoolid)' end
 
 GROUP BY st.dcid, sc.name, st.student_number, st.lastfirst, st.gender, st.grade_level,st.State_StudentNumber, st.enroll_status,st.ENTRYDATE, st.exitdate
