@@ -9,8 +9,8 @@ st.grade_level,
 CASE WHEN st.enroll_status = 0 THEN 'Active' ELSE 'Exited' END,
 to_char(st.entrydate,'mm/dd/yyyy'), 
 to_char(st.exitdate,'mm/dd/yyyy'),
-sum(CASE WHEN ac.att_code = 'D1' THEN 1 ELSE 0 END),
-listagg (CASE WHEN ac.att_code = 'D1' THEN to_char(a.att_date,'mm/dd/yyyy') END , ',') WITHIN GROUP (Order By a.att_date)
+sum(CASE WHEN ac.att_code IN ('D1','RLD1') THEN 1 ELSE 0 END) "count_first_day",
+listagg (CASE WHEN ac.att_code IN ('D1','RLD1') THEN to_char(a.att_date,'mm/dd/yyyy') END , ',') WITHIN GROUP (Order By a.att_date) "att"
 
 FROM students st
     left JOIN (SELECT * FROM attendance WHERE attendance.att_date between '%param1%' and '%param2%') a ON (st.id=a.studentid and st.schoolid=a.schoolid)
