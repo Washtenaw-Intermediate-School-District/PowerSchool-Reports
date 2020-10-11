@@ -1,6 +1,8 @@
 WITH programs AS (
 	SELECT
 		s.dcid,
+		s.student_number,
+		s.grade_level,
 		CASE gcx.flaglep WHEN 1 THEN 'English Language Learner (ELL)'
 		ELSE NULL
 		END LEP,
@@ -63,7 +65,8 @@ unpiv AS (
 	SELECT
 		*
 	FROM
-		programs unpivot (program_name FOR prgm IN(LEP AS 'LEP',
+		programs unpivot (program_name FOR prgm IN(
+				LEP AS 'LEP',
 				speced AS 'SE',
 				Title_1 AS 'T1',
 				unaccyouth AS 'UY',
@@ -87,5 +90,5 @@ SELECT
 FROM
 	unpiv
 WHERE
-	unpiv.schoolid = 9404
-	AND unpiv.dcid NOT IN (20801,4859)
+	unpiv.schoolid NOT IN (1938,1515)
+	AND unpiv.GRADE_LEVEL BETWEEN 0 AND 5
