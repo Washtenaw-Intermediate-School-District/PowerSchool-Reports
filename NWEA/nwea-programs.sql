@@ -90,5 +90,7 @@ SELECT
 FROM
 	unpiv
 WHERE
-	unpiv.schoolid NOT IN (1938,1515)
-	AND unpiv.GRADE_LEVEL BETWEEN 0 AND 5
+	unpiv.schoolid NOT IN (1938,1515,7871,1933)
+	--AND unpiv.grade_level BETWEEN 6 AND 8
+	AND unpiv.grade_level >= 9
+	AND unpiv.schoolid = 1925
