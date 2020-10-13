@@ -55,7 +55,9 @@ WHERE
  AND courses.course_name LIKE ('AM%')
  AND cc.termid >= 3000
  AND cc.schoolid != 1938
- AND users.last_name LIKE ('Lutz')
+ AND users.last_name NOT LIKE ('TBA%')
+ AND students.grade_level BETWEEN 0 AND 5
+ --AND users.last_name LIKE ('Lutz')
  
 
 ORDER BY
