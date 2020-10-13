@@ -47,8 +47,10 @@ WHERE
  students.entrydate >= to_date('09/08/2020','MM/DD/YYYY')
  AND students.enroll_status = 0
  AND cc.termid BETWEEN 3000 AND 3001 --only rostering first semester classes
- AND students.grade_level BETWEEN 6 AND 8
+ --AND students.grade_level BETWEEN 6 AND 8
+ AND students.grade_level >= 9
  AND users.last_name NOT LIKE ('TBA%')
+ AND students.schoolid = 1925
  
 
 ORDER BY
