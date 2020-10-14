@@ -16,7 +16,7 @@ SUM(CASE WHEN ac.att_code IN ('D1','EL', 'IM', 'PH') THEN 1 ELSE 0 END) As Total
 SUM(CASE WHEN ac.att_code IN ('F2F','FF','RLP','VP','CA') THEN 1 ELSE 0 END) As P_Total
 
 FROM students st
-    left JOIN (SELECT * FROM PSSIS_Attendance_Meeting WHERE PSSIS_Attendance_Meeting.att_date BETWEEN to_date('10/07/2020','mm/dd/yyyy') AND to_date('10/13/2020','mm/dd/yyyy')) a ON (st.id=a.studentid)
+    left JOIN (SELECT * FROM PSSIS_Attendance_Meeting WHERE PSSIS_Attendance_Meeting.att_date BETWEEN to_date('10/07/2020','mm/dd/yyyy') AND to_date('10/13/2020','mm/dd/yyyy')) a ON (st.id=a.studentid) -- these are the two days that need to be updated to reflect the date search range
     left JOIN attendance_code ac ON ac.id=a.attendance_codeid
     left JOIN Period pe ON a.periodid=pe.id
     LEFT JOIN Schools sc ON st.schoolid = sc.school_number
@@ -26,7 +26,7 @@ FROM students st
 
 
 WHERE 
-    (st.exitdate IS NULL OR st.exitdate>= to_date('10/07/2020','mm/dd/yyyy'))
+    (st.exitdate IS NULL OR st.exitdate > to_date('10/07/2020','mm/dd/yyyy')) -- this should be Count Day and vet students who are still active as of Count Day.
     AND (a.att_date IS NULL OR (a.att_mode_code='ATT_ModeMeeting') )
     AND st.grade_level>-1
     AND st.schoolid = 3000
@@ -40,7 +40,7 @@ GROUP BY
 	st.student_number, 
 	st.ENTRYDATE, st.exitdate
 
-HAVING SUM(CASE WHEN ac.att_code IN ('D1','EL', 'IM', 'PH', 'RLD1') THEN 1 ELSE 0 END) > 0
-	AND SUM(CASE WHEN ac.att_code IN ('F2F','FF','RLP','VP','CA') THEN 1 ELSE 0 END) = 0
+HAVING SUM(CASE WHEN ac.att_code IN ('D1','EL', 'IM', 'PH', 'RLD1') THEN 1 ELSE 0 END) > 0 -- filters for anyone who has two way communication codes
+	AND SUM(CASE WHEN ac.att_code IN ('F2F','FF','RLP','VP','CA') THEN 1 ELSE 0 END) = 0 -- filters out students who have any Count Day present codes
 
 order by sc.name, st.grade_level, st.lastfirst
