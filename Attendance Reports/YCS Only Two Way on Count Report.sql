@@ -16,20 +16,21 @@ SUM(CASE WHEN ac.att_code IN ('D1','EL', 'IM', 'PH') THEN 1 ELSE 0 END) As Total
 SUM(CASE WHEN ac.att_code IN ('F2F','FF','RLP','VP','CA') THEN 1 ELSE 0 END) As P_Total
 
 FROM students st
-    left JOIN (SELECT * FROM PSSIS_Attendance_Meeting WHERE PSSIS_Attendance_Meeting.att_date BETWEEN to_date('10/07/2020','mm/dd/yyyy') AND to_date('10/13/2020','mm/dd/yyyy')) a ON (st.id=a.studentid) -- these are the two days that need to be updated to reflect the date search range
-    left JOIN attendance_code ac ON ac.id=a.attendance_codeid
-    left JOIN Period pe ON a.periodid=pe.id
+    LEFT JOIN (SELECT * FROM PSSIS_Attendance_Meeting /* using this table in order to filter schools based on enrollment not the student's home school */ 
+    	WHERE PSSIS_Attendance_Meeting.att_date BETWEEN to_date('10/07/2020','mm/dd/yyyy') AND to_date('10/13/2020','mm/dd/yyyy')) a ON (st.id=a.studentid) -- these are the two days that need to be updated to reflect the date search range
+    LEFT JOIN attendance_code ac ON ac.id=a.attendance_codeid
+    LEFT JOIN Period pe ON a.periodid=pe.id
     LEFT JOIN Schools sc ON st.schoolid = sc.school_number
-    	left JOIN CC ON a.ccid = CC.id
-    left JOIN teachers ON cc.TEACHERID = TEACHERS.ID
+    LEFT JOIN CC ON a.ccid = CC.id
+    LEFT JOIN teachers ON cc.TEACHERID = TEACHERS.ID
 
 
 
 WHERE 
     (st.exitdate IS NULL OR st.exitdate > to_date('10/07/2020','mm/dd/yyyy')) -- this should be Count Day and vet students who are still active as of Count Day.
     AND (a.att_date IS NULL OR (a.att_mode_code='ATT_ModeMeeting') )
-    AND st.grade_level>-1
-    AND st.schoolid = 3000
+    AND st.grade_level>-1 -- excludes PreSchool students
+    AND st.schoolid = 3000 -- school filter to focus in on only one school
    
 
 GROUP BY 
