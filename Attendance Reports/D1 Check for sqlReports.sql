@@ -10,7 +10,7 @@ CASE WHEN st.enroll_status = 0 THEN 'Active' ELSE 'Exited' END,
 to_char(st.entrydate,'mm/dd/yyyy'), 
 to_char(st.exitdate,'mm/dd/yyyy'),
 sum(CASE WHEN ac.att_code IN ('D1','RLD1') THEN 1 ELSE 0 END),
-listagg (CASE WHEN ac.att_code IN ('D1','RLD1') THEN to_char(a.att_date,'mm/dd/yyyy') END , ',') WITHIN GROUP (Order By a.att_date)
+listagg (CASE WHEN ac.att_code IN ('D1','RLD1') THEN pe.ABBREVIATION || '-' || to_char(a.att_date,'mm/dd/yyyy')   END , ', ') WITHIN GROUP (Order By a.att_date)
 
 FROM students st
     left JOIN (SELECT * FROM PSSIS_Attendance_Meeting WHERE PSSIS_Attendance_Meeting.att_date between to_date('%param1%','mm/dd/yyyy') and to_date('%param2%','mm/dd/yyyy')) a ON (st.id=a.studentid)
