@@ -1,5 +1,5 @@
 SELECT
-	STUDENTS.home_room,
+	CASE WHEN PS_AdaAdm_Meeting_Ptod.SCHOOLID != ~(curschoolid) THEN chr(60) || 'span style='||chr(34)||'background-color'||chr(58)||'#F08080'||chr(59)||'display'||chr(58)||'block'||chr(34)||'>'||STUDENTS.home_room|| chr(60) || '/span>' ELSE STUDENTS.hoome_room END,
 	SUM(PS_ADAADM_MEETING_PTOD.MEMBERSHIPVALUE),
 	SUM(PS_ADAADM_MEETING_PTOD.ATTENDANCEVALUE)
 
