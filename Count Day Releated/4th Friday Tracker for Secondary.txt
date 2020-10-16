@@ -1,0 +1,108 @@
+
+
+<ReportName>4th Friday Report for Secondary</ReportName>
+<ReportTitle>4th Friday Report for Secondary</ReportTitle>
+<AfterTitle></AfterTitle>
+<ReportDescription><textarea></textarea></ReportDescription>
+<ReportGroup>Count Day</ReportGroup>
+<SQLQuery><textarea>SELECT
+	students.grade_level,
+    sum(PS_ADAADM_MEETING_PTOD.MEMBERSHIPVALUE),
+    sum(PS_ADAADM_MEETING_PTOD.ATTENDANCEVALUE)
+
+FROM STUDENTS
+	JOIN SCHOOLS ON STUDENTS.SCHOOLID = SCHOOLS.SCHOOL_NUMBER
+    JOIN PS_AdaAdm_Meeting_Ptod ON STUDENTS.id = PS_ADAADM_MEETING_PTOD.STUDENTID AND PS_ADAADM_MEETING_PTOD.CALENDARDATE = to_date('%param2%','mm/dd/yyyy')
+	
+WHERE
+	(STUDENTS.ENTRYDATE &gt;= to_date('%param1%','mm/dd/yyyy') AND STUDENTS.EXITDATE &gt; to_date('%param2%','mm/dd/yyyy'))
+    AND STUDENTS.schoolid like case when tilde(curschoolid)=0 then '%' else 'tilde(curschoolid)' end
+	AND students.entrydate != students.exitdate
+
+	
+GROUP BY students.grade_level
+	
+ORDER BY
+	STUDENTS.GRADE_LEVEL</textarea></SQLQuery>
+<ReportHeader><th>Grade Level</th><th>Enrolled</th><th>Head Count</th></ReportHeader>
+<FLSMapField><textarea></textarea></FLSMapField>
+<ExcFrmList></ExcFrmList>
+<sqlReportsQ></sqlReportsQ>
+<sqlExportsReport></sqlExportsReport>
+<ReportDirections><textarea></textarea></ReportDirections>
+<ParameterName1>First Day of the School Year</ParameterName1>
+<ParameterVal1>9/8/2020</ParameterVal1>
+<ParameterCal1>1</ParameterCal1>
+<ParameterOpt1></ParameterOpt1>
+<ParameterName2>Date to Check</ParameterName2>
+<ParameterVal2>10/7/2020</ParameterVal2>
+<ParameterCal2>1</ParameterCal2>
+<ParameterOpt2></ParameterOpt2>
+<ParameterName3></ParameterName3>
+<ParameterVal3></ParameterVal3>
+<ParameterCal3></ParameterCal3>
+<ParameterOpt3></ParameterOpt3>
+<ParameterName4></ParameterName4>
+<ParameterVal4></ParameterVal4>
+<ParameterCal4></ParameterCal4>
+<ParameterOpt4></ParameterOpt4>
+<ParameterName5></ParameterName5>
+<ParameterVal5></ParameterVal5>
+<ParameterCal5></ParameterCal5>
+<ParameterOpt5></ParameterOpt5>
+<ParameterName6></ParameterName6>
+<ParameterVal6></ParameterVal6>
+<ParameterCal6></ParameterCal6>
+<ParameterOpt6></ParameterOpt6>
+<ParameterName7></ParameterName7>
+<ParameterVal7></ParameterVal7>
+<ParameterCal7></ParameterCal7>
+<ParameterOpt7></ParameterOpt7>
+<ParameterName8></ParameterName8>
+<ParameterVal8></ParameterVal8>
+<ParameterCal8></ParameterCal8>
+<ParameterOpt8></ParameterOpt8>
+<CreateStudentSelectionB></CreateStudentSelectionB>
+<AddToCurSel></AddToCurSel>
+<ShowCurSelLine></ShowCurSelLine>
+<CreateStudentSelection>0</CreateStudentSelection>
+<StudentSelectionQuery></StudentSelectionQuery>
+<ExecGrp></ExecGrp>
+<sqlReportHeader><textarea></textarea></sqlReportHeader>
+<sqlReportFooter><textarea></textarea></sqlReportFooter>
+<sqlChartsReport></sqlChartsReport>
+<InitialsqlChart></InitialsqlChart>
+<InitialChartName></InitialChartName>
+<HideCopyButton></HideCopyButton>
+<HideCSVButton></HideCSVButton>
+<HideTabButton></HideTabButton>
+<HidePrint></HidePrint>
+<HidePDFButton></HidePDFButton>
+<ShowJSON></ShowJSON>
+<ShowSHC></ShowSHC>
+<PdfOrientation></PdfOrientation>
+<NoCSVQuotes></NoCSVQuotes>
+<NoHeaderRow></NoHeaderRow>
+<NoFooterRow></NoFooterRow> 
+<NoTitleOrHeaderCopy></NoTitleOrHeaderCopy>
+<OpeninNewWindow>0</OpeninNewWindow>
+<ValueLi3>0</ValueLi3>
+<HideParams></HideParams>
+<ShowGridlines></ShowGridlines>
+<IncludeRowNumber>0</IncludeRowNumber>
+<ShowSearchBox>1</ShowSearchBox>
+<ShowResultsInfoTop></ShowResultsInfoTop>
+<ShowResultsInfo></ShowResultsInfo>
+<UseColFilt>1</UseColFilt>
+<UseColRe></UseColRe>
+<UseFixHdr>1</UseFixHdr>
+<NoRowSel></NoRowSel>
+<UseRowGroups></UseRowGroups>
+<UseRowGroupsOptions>Opt1</UseRowGroupsOptions>
+<RowGroupsDesc></RowGroupsDesc>
+<DisplayRowGroupsCol></DisplayRowGroupsCol>
+<DisplaySubGroupsCol></DisplaySubGroupsCol>
+<UseRowGroupsCounts></UseRowGroupsCounts>
+<UseRowGroupsPageBreaks></UseRowGroupsPageBreaks>
+<ReportNotes><textarea></textarea></ReportNotes>
+
